@@ -1,0 +1,14 @@
+// https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
+{   
+  
+    //镜像地址，163的这个地址很快
+    "registry-mirrors": ["http://hub-mirror.c.163.com"],
+    //私服地址，非https的地址需添加
+    "insecure-registries": ["harbor.test.com"],
+    //重启docker，不重启容器，swarm模式下不能使用
+    "live-restore":true,
+    //存放docker持久化数据，默认/var/lib/docker
+    "data-root": "/home/docker/data",
+    //容器运行时候的文件目录，默认/var/run/docker
+    "exec-root":"/home/docker/run"
+}
