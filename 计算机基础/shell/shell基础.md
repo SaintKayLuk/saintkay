@@ -421,30 +421,298 @@ aa_DJ.iso88591
 
 |位置参数变量|作用|
 |-|-|
-|$n||
-|$*||
-|$@||
+|$n|n为数字，$1到$9代表第一个到第九个参数，十以上得参数需要用大括号包含，如${10}|
+|$*|命令行中所有的参数，把所有参数当成一个整体，多个参数for循环只会循环一次|
+|$@|命令行中所有的参数，把每个参数区别对待，多个参数for循环的时候会循环多次|
 |$#|代表命令行中所有参数的个数|
 
-
-
-
-
-
-
+例：通过$n来获取位置参数，\$@获取所有参数，并区分，\$#获取参数个数
+```sh
+[root@localhost ~]# cat test.sh
+#!/bin/bash
+echo $1
+echo $2
+echo "====="
+for i in "$@"
+    do
+        echo $i
+    done
+echo "====="
+echo $#
+[root@localhost ~]# ./test.sh 11 22 33
+11
+22
+=====
+11
+22
+33
+=====
+3
+```
 
 #### 预定义变量
 
+|预定义变量|作用|
+|-|-|
+|$?|最后一次执行的命令的返回状态，返回数字0或者其他，返回0则上一次执行的命令正确，返回非0则上一次命令执行错误|
+|$$|当前进程的进程号(PID)|
+|$!|后台运行的最后一个进程的进程号(PID)|
+
+#### read
+
+位置参数变量使用比较不友好， read可以提示输入
+
+~~~
+read [选项] [变量名]
+    -p "提示信息"   在等待read输入时，输出提示信息
+    -t 秒数         read命令会一直等待用户输入，此选项选择等待秒数，等待时间内用户没有输入，会结束脚本
+    -n 字符数       允许输入的最大字符数，达到指定字符数会自动回车
+    -s              隐藏输入的数据，类似于登陆时输入密码
+~~~
+
+例：通过read提示用户输入，允许最大输入字符数为2，并且等待输入30秒
+```sh
+[root@localhost ~]# cat test.sh
+#!/bin/bash
+read -t 30 -n 3 -p "请输入姓名：" name 
+echo $name  
+
+[root@localhost ~]# ./test.sh
+请输入姓名：sk
+sk
+```
+
+## 数值运算
+
+### 数值运算方法
+
+#### 使用declare声明变量类型
+因为shell默认变量为字符串类型，我们在做数值运算的时候可以使用declare声明变量类型为数值
+```sh
+declare [+/-] [选项] 变量名
+    -   给变量设定类型属性
+    +   取消变量的类型属性
+        a   将变量声明为数组
+        i   将变量声明为整数
+        r   将变量声明为只读属性，一旦设置为只读属性，此变量不能改变值，也不能被删除，更不能通过 +r 取消只读属性，此声明是通过命令是临时生效的，重启失效
+        x   将变量声明为环境变量
+        p   显示指定的被声明的类型
+```
+**-是设定属性，+是取消属性**
+-x 声明的环境变量，和 export 命令作用是一样，export 命令其实就是通过 declare -x 来设定为环境变量,
+~~~
+[user@localhost ~]$ declare -x age=18
+~~~
+
+例：通过给c设置属性为整数型，会把a+b作为数值运算
+```sh
+[user@localhost ~]$ a=11
+[user@localhost ~]$ b=22
+[user@localhost ~]$ declare -i c=$a+$b
+[user@localhost ~]$ echo c
+33
+```
+
+例：声明数组类型,通过 ${数组名[*]} 获取数组中所有值
+```sh
+[user@localhost ~]$ declare -a name[0]="pa"
+[user@localhost ~]$ name[1]="spe"
+[user@localhost ~]$ name[2]="jugg"
+[user@localhost ~]$ echo ${name[*]}
+pa spe jugg
+```
+通过 declare -p 来查看所有变量,也可以指定变量名来查看某个变量 declare -p 变量名
+```sh
+[user@localhost ~]$ declare -p
+declare -- BASH="/bin/bash"
+declare -r BASHOPTS="checkwinsize:cmdhist:expand_aliases:extquote:force_fignore:histappend:hostcomplete:interactive_comments:login_shell:progcomp:promptvars:sourcepath"
+declare -ir BASHPID
+...
+```
 
 
-## 运算符
+#### 使用 expr 或 let 数值运算工具
+
+例：使用expr进行数值运算
+```
+[root@localhost ~]# a=11
+[root@localhost ~]# b=22
+[root@localhost ~]# c=$(expr $a + $b)
+[root@localhost ~]# echo $c
+33
+```
++号左右两侧必须要又空格
+
+例：使用let进行数值运算
+```
+[root@localhost ~]# let d=$a+$b
+[root@localhost ~]# echo $d
+33
+```
+
+#### 使用 $(()) 或 $[] 运算
+
+推荐使用 $(()) 方式进行数值运算
+
+例：使用$(())进行运算
+```
+[root@localhost ~]# e=$(( $a+$b ))
+[root@localhost ~]# echo $e
+33
+```
+空格要求不严格，可以有空格也可以没有空格，默认都加上空格
+
+
+### 运算符
+
+|运算符|说明|
+|-----|-|
+|-,+  |单目负，单目正|
+|!,~  |逻辑非，按位取反或补码|
+|*,/,%|乘，除，取模|
+|+,-  |加，减|
+|<<,>>|按位左移，按位右移|
+|<=,>=,<,>|小于等于，大于等于，小于，大于|
+|==,!=|等于，不等于|
+|$    |按位与|
+|^    |按位异或|
+|\|   |按位或|
+|&&   |逻辑与|
+|\|\| |逻辑或|
+|=,+=,-=,*=,/=,%=,&=,^=,\|=,<<=,>>=|赋值，运算且赋值|
+
+从上到下，优先级依次降低
+
+例：加减乘除
+```sh
+[user@localhost ~]$ a=$(( (11+3)*3/2 ))
+[user@localhost ~]$ echo $a
+21
+```
+
+### 变量测试与内容置换
+
+|变量置换方式|变量y没有设定|变量y为空值|变量y有值|
+|-|-|-|-|
+|x=${y-新值} |x=新值|x为空 |x=$y|
+|x=${y:-新值}|x=新值|x=新值|x=$y|
+|x=${y+新值} |x为空 |x=新值|x=新值|
 
 
 
 
+## 环境变量配置文件
 
 
+加载配置文件方式
+```sh
+[user@localhost ~]$ source 配置文件 
+[user@localhost ~]$ . 配置文件
+```
 
+### 登陆生效的配置文件
+
+* /etc/prifile
+* /etc/profile.d/*.sh
+* ~/.bash_profile
+* ~/.bashrc
+* /etc/bashrc
+
+
+环境变量配置文件调用过程
+```
+登陆：
+etc/profile --> ~/.bash_profile     --> ~/,bashrc   --> /etc/bashrc --> 命令提示符
+            --> /etc/profile.d/*.sh
+
+非登陆:
+/etc/bashrc --> /etc/profile.d/*.sh
+```
+5个环境变量配置文件依次调用，按道理我们定义的环境变量放在哪一个环境变量配置文件都会生效，但建议 针对所有用户生效放入 /etc/profile，针对自己生效可以放在 ~/.bash_profile 或 ~/.bashrc
+
+#### /etc/profile
+
+* USER变量：根据登陆的用户，给这个变量赋值
+* LOGNAME变量：根据USER变量的值，给这个变量赋值
+* MAIL变量：根据登陆的用户，定义用户的邮箱目录，一般为 /var/spool/mail/用户名
+* PATH变量：根据登陆用户的UID是否为0，判断PATH变量是否包含 /sbin,/usr/sbin./usr/local/sbin 三个系统命令目录
+* HOSTNAME变量：主机名，给这个变量赋值
+* HISTSIZE变量：定义历史命令的保存条数
+* umask：定义umask默认权限，在用户登陆过程时才会生效
+* 调用 /etc/profile.d/*.sh
+
+#### ~/.bash_profile
+
+* 在PATH变量后面加入 :&HOME/bin 这个目录，也就是说，我们在自己的家目录下，建立一个 bin 目录，把脚本放入 ~/bin 目录下，就能直接执行
+* 调用 ~/.bashrc
+
+#### ~/.bashrc
+
+* 定义默认别名
+* 调用 /etc/bashrc
+
+#### /etc/bashrc
+
+* PS1变量：也就是用户提示符，永久修改可以在这个文件修改
+* umask：定义默认权限，但是是针对没有登陆过程
+* PATH变量：给PATH变量追加值，针对没有登陆过程
+* 调用/etc/prifile.d/*.sh
+
+#### /etc/profile.d/*.sh
+
+此目录下所有 以 .sh 结尾的文件都会被调用
+
+
+### 注销生效的配置文件
+
+```
+~/.bash_logout
+```
+此配置文件默认为空，而且只能正常退出才生效，例如远程登陆直接关掉不生效
+
+### shell登陆信息
+
+#### /etc/issue
+
+登陆本地终端，tty1-tty6时根据这个文件内容提示信息
+```
+[root@localhost ~]# cat /etc/issue
+\S
+Kernel \r on an \m
+```
+可以通过 man agetty 查询转义符
+|转义符|作用|
+|-|-|
+|\d|显示当前系统日期|
+|\s|显示操作系统名称|
+|\l|显示登陆的终端号|
+|\m|显示硬件体系结构|
+|\n|显示主机名|
+|\o|显示域名|
+|\r|显示内核版本|
+|\t|显示当前系统时间|
+|\u|显示当前登陆用户的序列号|
+
+#### /etc/issue.net
+
+远程登陆(如ssh远程登陆，telnet远程登陆)显示的提示信息
+* /etc/issue.net 不支持转义符
+* ssh登陆是否显示 /etc/issue.net 的信息，需要修改ssh的配置文件
+
+
+ssh的配置文件修改，让ssh登陆能够显示 /etc/issue.net 的提示信息，其实这里也可以设置为 /etc/issue 文件，但是远程登陆不会识别转义符，为了区分，建议使用 /etc/issue.net
+```
+[root@localhost ~]# cat /etc/ssh/sshd_config
+...
+# no default banner path
+#Banner none
+Banner /etc/issue.net
+...
+```
+
+#### /etc/motd
+
+在用户登陆之后提示的信息，无论远程登陆或本地登陆都生效
 
 
 
