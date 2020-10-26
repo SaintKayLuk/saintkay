@@ -3,10 +3,34 @@
 https://wiki.centos.org/Download
 
 
+## 修改网卡名
+
+1. 修改网卡配置文件名(最好将原来的文件备份)
+```sh
+mv /etc/sysconfig/network-scripts/ifcfg-ens33 /etc/sysconfig/network-scripts/ifcfg-eth0
+```
+2. 修改网卡配置文件内容
+```
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+NAME=eth0
+DEVICE=eth0
+```
+3. 修改grup配置文件,在 GRUB_CMDLINE_LINUX 后面添加 <font color="red">net.ifnames=0 biosdevname=0</font>
+```
+vi /etc/default/grub
+GRUB_CMDLINE_LINUX="crashkernel=auto rd.lvm.lv=cl/root rd.lvm.lv=cl/swap nomodeset rhgb quiet net.ifnames=0 biosdevname=0"
+```
+4. 更新grup配置文件，加载新的参数
+```
+grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+5. 重启，重新读取网卡
+```
+shutdown -r
+```
 
 
 ## 修改网卡配置文件
-
 
 查看网卡配置文件,在目录 /etc/sysconfig/network-scripts/
 ~~~
