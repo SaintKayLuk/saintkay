@@ -13,6 +13,8 @@ certbot-auto certonly --webroot --webroot-path /usr/local/java/nginx/html -d yin
 
 certbot-auto certonly --webroot --webroot-path /usr/local/java/nginx/html -d map.yintaijiaoyu.cn
 
+certbot-auto certonly --webroot --webroot-path /usr/local/java/nginx/html -d biyoushijiaoyu.cn
+
 更新
 ~~~
 certbot-auto renew --no-self-upgrade  --force-renew
