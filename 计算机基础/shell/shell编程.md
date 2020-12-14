@@ -352,21 +352,123 @@ if [ 条件判断式 ]
 fi
 ```
 
-扫描端口
-```
-nmap [选项] 域名或IP
-    -s  扫描
-    -T  扫描所有开启的TCP端口
-```
-例：扫描 ip为 11.22.33.44 的所有开启的tcp端口
+## case
+
 ```sh
-namp -sT 11.22.33.44
+case $变量名 in
+    "值1")
+        执行程序1
+        ;;
+    "值2")
+        执行程序2
+        ;;
+    ...省略...
+    *)
+        都不是以上的值，执行此程序
+        ;;
+esac
+```
+例：判断变量num 等于1还是2还是3
+```sh
+case $num in
+    "1")
+        echo "变量等于1"
+        ;;
+    "2")
+        echo "变量等于2"
+        ;;
+    "3")
+        echo "变量等于3"
+        ;;
+    *)
+        echo "都不是以上的值，则输出这句"
+        ;;
+esac
 ```
 
+## for
 
+语法一：循环 in 后面值的个数次，(用空格分隔)，每次循环把值赋值给变量
+```sh
+for 变量 in 值1 值2 值3 ...
+    do
+        循环体
+    done
 
+```
+语法二：和大多数程序一样，通过条件判断来循环
+```sh
+for (( 初始值;循环控制条件;变量变化 ))
+    do
+        循环体
+    done
+```
 
+对于脚本而言，语法一比较方便
+例：批量解压 /tmp/tar/ 目录下的 .tar.gz 和 .tgz 结尾的压缩包
+```sh
+#!/bin/bash
 
+cd /tmp/tar
+# 进入压缩目录
+ls *.tar.gz > ls.log
+ls *.tgz >> ls.log
+# 把所有 .tar.gz .tgz 结尾的文件名覆盖到 ls.log 文件中
+for i in $(cat ls.log)
+    do
+        tar -zxvf $i
+    done
+
+rm -rf /tmp/tar/ls.log
+# 删除临时文件
+```
+
+## while
+
+while里面的条件判断式成立，则执行do和done里面的内容
+
+```sh
+while [ 条件判断式 ]
+    do
+        循环体
+    done
+```
+
+例：求1到100的和 、
+```sh
+#!/bin/bash
+i=1
+s=0
+while [ $i -le 100 ]
+    do
+        s=$(( $s+$i ))
+        i=$(( $i+1 ))
+    done
+echo $s
+```
+
+## until
+
+until里面的条件判断式不成立，则执行do和done里面的内容
+```sh
+until [ 条件判断式 ]
+    do
+        循环体
+    done
+```
+
+## exit
+在命令行中用于退出当前登录，在shell脚本中，用于终止当前程序，exit 后面的返回值，可以使用 $? 查看返回值
+
+```sh
+exit [ 返回值 ]
+```
+
+## break
+跳出当前循环
+
+## continue
+结束单次当前循环
 
 
 
