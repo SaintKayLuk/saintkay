@@ -3,17 +3,12 @@
 ## certbot
 
 ### centos6
-certbot-auto certonly --email rapzogo@snapmail.cc -d xxx.com --manual --preferred-challenges dns --server https://acme-v02.api.letsencrypt.org/directory --no-self-upgrade
-
-
-certbot-auto certonly --webroot --webroot-path /usr/share/nginx/html --email rapzogo@snapmail.cc -d xxx.com 
 
 certbot-auto certonly --webroot --webroot-path /usr/local/java/nginx/html -d yintai.xclearn.com
 
-
 certbot-auto certonly --webroot --webroot-path /usr/local/java/nginx/html -d map.yintaijiaoyu.cn
 
-certbot-auto certonly --webroot --webroot-path /usr/local/java/nginx/html -d biyoushijiaoyu.cn
+certbot-auto certonly --no-self-upgrade --webroot --webroot-path /usr/local/java/nginx/html -d map.gbc-edu.cn
 
 更新
 ~~~
