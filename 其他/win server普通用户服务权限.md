@@ -18,7 +18,7 @@
 * U：提供用户定义的控制命令
 
 
-例：给 xiaoshan 用户赋予 myService 服务的 启动，停止，暂停 权限
+例：给 xiaoshan 用户赋予 myService 服务的 启动、停止、暂停 权限
 ```
 subinacl /service myService /grant=xiaoshan=top
 ```
