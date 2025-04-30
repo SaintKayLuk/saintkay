@@ -1,0 +1,2 @@
+[Setup]
+AppName=My Program

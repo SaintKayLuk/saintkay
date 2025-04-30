@@ -1,0 +1,26 @@
+# This section includes base Calico installation configuration.
+# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.Installation
+apiVersion: operator.tigera.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  # Configures Calico networking.
+  calicoNetwork:
+    # Note: The ipPools section cannot be modified post-install.
+    ipPools:
+    - blockSize: 26
+      cidr: 192.168.0.0/16              # 集群中 pod 的ip 范围，需要和 kubeadm init --pod-network-cidr 的值一致
+      encapsulation: VXLANCrossSubnet   # 定义网络封装模式（如 VXLAN 或 IPIP）
+      natOutgoing: Enabled              # 定义是否为 Pod 的流量启用 NAT
+      nodeSelector: all()               # 定义该网络配置适用于所有节点
+
+---
+
+# This section configures the Calico API server.
+# For more information, see: https://projectcalico.docs.tigera.io/master/reference/installation/api#operator.tigera.io/v1.APIServer
+apiVersion: operator.tigera.io/v1
+kind: APIServer 
+metadata: 
+  name: default 
+spec: {}

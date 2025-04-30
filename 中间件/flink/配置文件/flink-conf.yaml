@@ -1,0 +1,60 @@
+
+
+# JAVA_HOME配置
+env.java.home: /xxx
+
+# jobmanager的地址和端口
+jobmanager.rpc.address: localhost
+jobmanager.rpc.port: 6123
+
+
+# JobManager（JobMaster / ResourceManager / Dispatcher）内存大小
+jobmanager.memory.process.size: 1600m
+
+# TaskManager 总内存大小
+taskmanager.memory.process.size: 1728m
+ 
+# To exclude JVM metaspace and overhead, please, use total Flink memory size instead of 'taskmanager.memory.process.size'.
+# It is not recommended to set both 'taskmanager.memory.process.size' and Flink memory.
+#
+# taskmanager.memory.flink.size: 1280m
+
+
+# 每个TaskManager提供的任务槽数。每个插槽运行一个并行管道，一般设置cpu核心数
+taskmanager.numberOfTaskSlots: 1
+# 默认任务并行度
+parallelism.default: 1
+
+
+
+
+
+
+
+
+# 要使用的状态后端
+state.backend: filesystem
+# 写入checkpoint的目录，路径URL，
+state.checkpoints.dir: file:///tmp/checkpoint
+# 写入savepoint的目录，路径URL
+state.savepoints.dir: file:///tmp/savepoint
+# 两次checkpoint 间隔时间。此值设置大于 0 则启用检查点(毫秒)
+execution.checkpointing.interval: 1000
+# 保存的checkpoint最大次数，默认1，只保存一份，上一份会被删除
+state.checkpoints.num-retained: 1
+
+#作业取消时是否清理外部化检查点，(只有在job出错或者手动cancel才会保存，如果是 flink stop xxx 则不会保存checkpoint)
+# DELETE_ON_CANCELLATION 任务取消时，删除checkpoint
+# RETAIN_ON_CANCELLATION 任务取消时，保留checkpoint，此point会一直存在，需手动删除
+execution.checkpointing.externalized-checkpoint-retention: DELETE_ON_CANCELLATION
+
+
+#保留历史任务
+jobmanager.archive.fs.dir: history
+historyserver.archive.fs.dir: history
+historyserver.archive.fs.refresh-interval: 10000
+historyserver.archive.retained-jobs: 2
+
+
+
+

@@ -1,0 +1,89 @@
+# ----------------------------------- Cluster -----------------------------------
+#集群名字
+cluster.name: my-application
+
+#为特定类型的分片启用或禁用分配
+# all（默认）- 允许为所有类型的分片分配分片
+# primaries- 只允许对主分片进行分片分配。
+# new_primaries- 仅允许为新索引的主分片分配分片。
+# none- 不允许对任何索引进行任何类型的分片分配。
+cluster.routing.allocation.enable: all
+
+
+# ------------------------------------ Node ------------------------------------
+# 节点名字
+node.name: node-1
+# 是否为数据节点，可以存储分片数据，默认为true
+node.data: true
+
+
+# ----------------------------------- Paths ------------------------------------
+#数据路径
+path.data: /path/to/data
+#日志路径
+path.logs: /path/to/logs
+
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+#bootstrap.memory_lock: true
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+
+# ---------------------------------- Network -----------------------------------
+#监听ip，默认监听localhost
+network.host: 192.168.1.10
+#监听端口，默认9200
+http.port: 9200
+
+# --------------------------------- Discovery ----------------------------------
+
+#单机运行，默认是集群，即使你只有一个节点，但是防止其他节点加入，可设置为单机
+discovery.type: single-node
+
+#集群中其他节点的列表，这些节点符合主节点资格,即有资格成为主节点
+#1.端口是可选的，默认为9300，但可以被覆盖
+#2.如果一个主机名解析为多个 IP 地址，该节点将尝试在所有已解析地址上发现其他节点
+#3.IPv6 地址必须用方括号括起来
+discovery.seed_hosts:
+   - 192.168.1.10:9300
+   - 192.168.1.11 
+   - seeds.mydomain.com 
+   - [0:0:0:0:0:ffff:c0a8:10c]:9301 
+
+#第一次启动集群时，主节点群
+#集群首次成功形成后，cluster.initial_master_nodes从每个节点的配置中删除该设置。重新启动集群或将新节点添加到现有集群时不要使用此设置。
+cluster.initial_master_nodes: 
+   - master-node-a
+   - master-node-b
+   - master-node-c
+
+# ---------------------------------- Various -----------------------------------
+
+#删除索引时显示名称
+action.destructive_requires_name: true
+
+# ---------------------------------- Security ----------------------------------
+
+
+#开启xpack安全验证
+xpack.security.enabled: true
+
+
+
+
+
+
+
+
+
+
+
+
+

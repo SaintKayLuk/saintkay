@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: consul-config
+  namespace: default
+data:
+  consul.json: |
+    {
+      "server": true,
+      "bootstrap_expect": 1,
+      "ui": true,
+      "datacenter": "dc1",
+      "data_dir": "/consul/data",
+      "log_level": "INFO",
+      "enable_script_checks": true,
+      "retry_join": ["consul"],
+      "bind_addr": "{{ GetInterfaceIP \"eth0\" }}",
+      "client_addr": "0.0.0.0",
+      "advertise_addr": "{{ GetInterfaceIP \"eth0\" }}"
+      "limits": {
+        "kv_max_value_size": 524288
+      }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: default
+  labels:
+    app: consul
+spec:
+  ports:
+    - port: 8500  # Consul UI
+      name: http
+    - port: 8600  # DNS Interface
+      name: dns
+  clusterIP: None  # Headless Service
+  selector:
+    app: consul
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: consul
+  namespace: default
+spec:
+  serviceName: "consul"
+  replicas: 1  # 单节点，可以调整为3+节点进行集群部署
+  selector:
+    matchLabels:
+      app: consul
+  template:
+    metadata:
+      labels:
+        app: consul
+    spec:
+      containers:
+      - name: consul
+        image: hashicorp/consul:1.18
+        ports:
+        - containerPort: 8500  # Consul UI
+          name: http
+        - containerPort: 8600  # DNS Interface
+          name: dns
+        volumeMounts:
+        - name: consul-data
+          mountPath: /consul/data
+        - name: consul-config
+          mountPath: /consul/config/consul.json
+        command: ["consul", "agent", "-server", "-config-file=/consul/config/consul.json"]
+      volumes:
+      - name: consul-config
+        configMap:
+          name: consul-config
+  volumeClaimTemplates:
+  - metadata:
+      name: consul-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: alicloud-disk-topology-alltype  # 使用阿里云存储类
+      resources:
+        requests:
+          storage: 20Gi   # 阿里云存储类最小20Gi

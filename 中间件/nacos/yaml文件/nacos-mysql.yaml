@@ -1,0 +1,51 @@
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: mysql
+#   namespace: base
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       name: mysql
+#   template:
+#     metadata:
+#       labels:
+#         name: mysql
+#     spec:
+#       nodeName: cn-hongkong.192.168.2.195       # 直接指定一个节点
+#       containers:
+#       - name: mysql
+#         image: registry.cn-hangzhou.aliyuncs.com/saintkay/nacos-mysql:5.7
+#         ports:
+#         - containerPort: 3306
+#         volumeMounts:
+#         - name: mysql-data
+#           mountPath: /var/lib/mysql
+#         env:
+#         - name: MYSQL_ROOT_PASSWORD
+#           value: "root"
+#         - name: MYSQL_DATABASE
+#           value: "nacos"
+#         - name: MYSQL_USER
+#           value: "nacos"
+#         - name: MYSQL_PASSWORD
+#           value: "nacos"
+#       volumes:
+#       - name: mysql-data
+#         hostPath:                 #本地存储了
+#           path: /var/lib/mysql
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: mysql
+#   namespace: base
+#   labels:
+#     name: mysql
+# spec:
+#   ports:
+#   - port: 3306
+#     targetPort: 3306
+#   selector:
+#     name: mysql

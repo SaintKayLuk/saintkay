@@ -1,0 +1,59 @@
+apiVersion: databases.spotahome.com/v1
+kind: RedisFailover
+metadata:
+  name: redisfailover
+  namespace: default
+spec:
+  sentinel:
+    replicas: 2
+    resources: 
+      requests:
+        memory: "50Mi"
+        cpu: "100m"
+
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - sentinel  
+            topologyKey: "kubernetes.io/hostname"
+
+  redis:
+    replicas: 3  # Redis 实例（1 主 + 2 从）
+    image: docker.io/redis:6.2.16  # 指定 Redis 版本
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        memory: "500Mi"
+        cpu: "250m"
+
+
+    # 添加阿里云存储类
+    storage:
+      persistentVolumeClaim:
+          metadata:
+            name: redisfailover-persistent-data
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 20Gi
+            storageClassName: alicloud-disk-topology-alltype
+
+    #添加pod反亲和性
+    affinity:
+      podAntiAffinity:  
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - redis
+            topologyKey: "kubernetes.io/hostname"
+

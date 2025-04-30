@@ -1,0 +1,22 @@
+## runner 副本
+# replicas: 1
+
+
+## gitlab 的地址
+# gitlabUrl: http://gitlab.your-domain.com/
+
+## 注册 runner 的 token
+# runnerRegistrationToken: ""
+
+
+## 新版本的 token ，上面那个预计在 gitlab 17 之后移除
+# runnerToken: ""
+
+
+
+## 是否创建rbac权限
+rbac:
+  create: false
+  ## Define the generated serviceAccountName when create is set to true
+  ## It defaults to "gitlab-runner.fullname" if not provided
+  generatedServiceAccountName: ""

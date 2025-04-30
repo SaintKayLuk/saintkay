@@ -1,0 +1,55 @@
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: quickstart
+  namespace: elastic-system
+spec:
+  type: filebeat
+  version: 7.17.25
+  elasticsearchRef:
+    name: es-cluster
+  config:
+    setup.ilm.enabled: true                      # 启用 ILM（推荐）
+    setup.ilm.rollover_alias: "wecharmer-wms-log"
+    setup.ilm.pattern: "{now/d}"                    # 这个按天分割好像不生效
+    output.elasticsearch:
+      hosts: ["https://es-cluster-es-http:9200"]    # 确保输出配置正确
+      username: "elastic"
+      password: "3Ani14lF5SZ2PVEzx662M8X7"                   # 如果需要，可以添加认证
+    filebeat.inputs:
+    - type: container
+      paths:
+      - /var/log/containers/wecharmer-wms*.log        # 确保路径匹配到您需要的日志文件
+    processors:
+    - add_kubernetes_metadata:
+        in_cluster: true
+        default_matchers.enabled: false
+        matchers:
+        - logs_path:
+            logs_path: "/var/log/containers/"
+    - rename:
+        fields:
+        - from: "kubernetes.deployment.name"
+          to: "deployment"
+        ignore_missing: true
+  daemonSet:
+    podTemplate:
+      spec:
+        dnsPolicy: ClusterFirstWithHostNet
+        hostNetwork: true
+        securityContext:
+          runAsUser: 0
+        containers:
+        - name: filebeat
+          volumeMounts:
+          - name: varlogcontainers
+            mountPath: /var/log/containers
+          - name: varlogpods
+            mountPath: /var/log/pods
+        volumes:
+        - name: varlogcontainers
+          hostPath:
+            path: /var/log/containers
+        - name: varlogpods
+          hostPath:
+            path: /var/log/pods

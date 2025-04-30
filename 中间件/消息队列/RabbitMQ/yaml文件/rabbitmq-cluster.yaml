@@ -1,0 +1,28 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmq-cluster
+  namespace: rabbitmq-system
+spec:
+  replicas: 3
+  rabbitmq:                           # 直接设定用户名密码，包括其他设置
+    additionalConfig: |
+      default_user = rabbitmq
+      default_pass = rabbitmq
+      frame_max = 1048576
+  image: rabbitmq:3.12.14-management
+  service:
+    type: ClusterIP
+  persistence:
+    storageClassName: alicloud-disk-topology-alltype
+    storage: 20Gi
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - rabbitmq
+          topologyKey: "kubernetes.io/hostname"

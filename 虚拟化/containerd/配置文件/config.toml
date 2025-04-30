@@ -1,0 +1,5 @@
+# 跟路径，存储镜像容器等
+root = "/var/lib/containerd"
+
+# 存储容器状态
+state = "/run/containerd"
