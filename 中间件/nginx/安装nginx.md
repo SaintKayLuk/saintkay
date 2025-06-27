@@ -6,7 +6,12 @@
 yum -y install wget gcc gcc-c++ openssl openssl-devel pcre-devel zlib zlib-devel
 
 #下载源码包
-wget http://nginx.org/download/nginx-1.16.1.tar.gz                 
+wget http://nginx.org/download/nginx-1.16.1.tar.gz
+
+# 1.26.3版本
+wget http://nginx.org/download/nginx-1.26.3.tar.gz
+
+
 #解压源码包
 tar -zxvf nginx-1.16.1.tar.gz
 #进入解压目录    
