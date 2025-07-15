@@ -27,7 +27,7 @@ systemctl enable kubelet --now
 ## 创建集群
 
 ```sh
-kubeadm init --apiserver-advertise-address xx.xx.xx.xx --image-repository registry.aliyuncs.com/google_containers --kubernetes-version v1.25.14 --service-cidr 10.20.0.0/16 --pod-network-cidr 10.10.0.0/16
+kubeadm init --apiserver-advertise-address xx.xx.xx.xx --image-repository registry.aliyuncs.com/google_containers --kubernetes-version v1.25.14 --pod-network-cidr 10.10.0.0/16 --service-cidr 10.20.0.0/16 
 
 ...
 Your Kubernetes control-plane has initialized successfully!

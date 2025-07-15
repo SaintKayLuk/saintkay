@@ -18,6 +18,9 @@ external_url https://gitlab.example.com
 ```rb
 external_url https://gitlab.example.com
 letsencrypt['enable'] = false
+
+# 这个也设置一下，
+nginx['redirect_http_to_https'] = true
 ```
 
 手动使用 Let’s Encrypt 生成证书后

@@ -20,7 +20,21 @@ curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.de
 
 安装
 ```sh
-GITLAB_ROOT_PASSWORD="f3cwMEjuJ7dvKC" EXTERNAL_URL="https://gitlab.wecharmer.com"  apt install gitlab-ce=16.11.8-ce.0
+GITLAB_ROOT_PASSWORD="f3cwMEjuJ7dvKC" EXTERNAL_URL="https://gitlab.xxx.com"  apt install gitlab-ce=16.11.10-ce.0
+```
+
+如果设置了 https 的域名，默认会启用 Let's Encrypt
+
+
+如果是内网机器，没有公网ip，则安装完之后手动更改配置文件，并手动放ssl证书
+```rb
+# 修改 /etc/gitlab/gitlab.rb
+letsencrypt['enable'] = false
+```
+
+重新配置
+```sh
+gitlab-ctl reconfigure
 ```
 
 安装完的目录结构

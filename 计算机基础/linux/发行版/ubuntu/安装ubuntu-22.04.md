@@ -32,7 +32,8 @@ https://ubuntu.com/download/server
     subnet:         网段，例如xx.xx.xx.xx/xx
     address:        IP地址，xx.xx.xx.xx
     gateway:        网关
-    name servers：  dns地址，例如杭州电信 202.101.172.35
+    name servers:   dns地址，例如杭州电信 202.101.172.35
+    Search domains: 搜索域访,访问一个“不完整的主机名”时，会自动加上这个域名后缀去尝试解析。例如设置了 xxx.com，则访问 web1，相当于访问 web1.xxx.com
     ```
 6. 设置代理：默认不添加，直接选 Done
 7. Ubuntu archive mirror configuration：等待加载完，点 Done ，如果testing失败了呢，默认镜像源需要改？
@@ -128,7 +129,7 @@ cp  /etc/apt/sources.list  /etc/apt/sources.list.bak
 替换的旧字符串不一定是 **http://cn.archive.ubuntu.com/ubuntu/**
 ```sh
 # 替换的旧字符串
-sed -i 's/http:\/\/cn.archive.ubuntu.com\/ubuntu\//http:\/\/mirrors.aliyun.com\/ubuntu\//g' /etc/apt/sources.list
+sed -i 's/http:\/\/cn.archive.ubuntu.com\/ubuntu\//https:\/\/mirrors.aliyun.com\/ubuntu\//g' /etc/apt/sources.list
 ```
 
 更新软件包索引

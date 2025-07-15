@@ -1,10 +1,17 @@
 ## 安装nginx
 
 
+安装依赖
 ```sh
-#安装依赖
+# centos 7
 yum -y install wget gcc gcc-c++ openssl openssl-devel pcre-devel zlib zlib-devel
 
+# ubuntu 22.04
+apt install -y wget build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev
+
+```
+
+```sh
 #下载源码包
 wget http://nginx.org/download/nginx-1.16.1.tar.gz
 
