@@ -1,0 +1,35 @@
+## kubeadm 安装
+
+
+备份3个东西
+* kubeadm 的 config文件，重新init的时候可以指定
+* kubernets配置文件
+* etcd数据
+
+
+备份配置文件
+```sh
+kubectl get configmap kubeadm-config -n kube-system -o yaml > kubeadm-config.yaml
+tar czpf kubernetes-backup-$(date +%F).tar.gz /etc/kubernetes
+```
+
+备份etcd
+```sh
+crictl ps  | grep etcd
+crictl exec -it <etcd容器ID> sh
+
+# 容器内执行
+ETCDCTL_API=3 etcdctl snapshot save /var/lib/etcd/etcd-backup.db
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key
+
+# 因为etcd 是静态pod，容器内的 /var/lib/etcd 就对应主机上的 /var/lib/etcd
+# 所以 etcd-backup.db 就在主机相同目录下
+```
+
+恢复操作
+
+
+

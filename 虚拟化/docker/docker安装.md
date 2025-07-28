@@ -125,7 +125,7 @@ WantedBy=multi-user.target
 
 
 
-## 卸载docker
+### 卸载docker
 
 yum remove docker-ce docker-ce-cli containerd.io
 
@@ -133,7 +133,7 @@ yum remove docker-ce docker-ce-cli containerd.io
 
 ## ubuntu
 
-
+### 通过apt存储库安装
 卸载旧包
 ```sh
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -169,8 +169,12 @@ VERSION_STRING=xxx
 sudo apt-get install -y docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
+验证一下
+```sh
+sudo docker run hello-world
+```
 
-## ubuntu 通过包安装
+### 通过包安装
 
 1. 下载包，地址
 ```

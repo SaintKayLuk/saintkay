@@ -39,7 +39,7 @@ cd nginx-1.16.1
 
 	--add-module=/第三方模块目录
 
-#自定义nginx安装目录，默认为 /usr/local/nginx
+#自定义nginx安装目录，默认为 /usr/local/nginx ，可以修改为 /opt/nginx
 --prefix=path	
 #添加ssl模块，可开启https的监听
 --with-http_ssl_module

@@ -218,18 +218,18 @@ location /abc/ {
 ## 负载均衡
 
 nginx支持3种负载均衡方式
-* round-robin(轮询，默认)
-* least-connected(最少连接)
-* ip-hash
+* round-robin(轮询，默认不用写)
+* least_conn(最少连接)
+* ip_hash
 
 通过反向代理 proxy_pass 将请求转发到多个服务
 
 添加upstream标签，和server同级
 
-例：通过ip-hash的方式负载均衡到3个服务器
+例：通过ip_hash的方式负载均衡到3个服务器
 ```conf
 upstream abc {
-	ip-hash;
+	ip_hash;
 	server srv1.example.com;
 	server srv2.example.com;
 	server srv3.example.com;

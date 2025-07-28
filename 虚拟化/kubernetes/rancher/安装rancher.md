@@ -44,8 +44,9 @@ ctr -n k8s.io image tag registry.cn-hangzhou.aliyuncs.com/saintkay/rancher.ranch
 
 
 
-## 安装 cert-manager
+## 安装 cert-manager (可选)
 如果在云上的集群，例如阿里云的ack，通过slb来负载均衡，默认是有证书
+
 
 ```sh
 helm repo add jetstack https://charts.jetstack.io
@@ -59,7 +60,7 @@ helm search repo cert-manager --versions
 
 安装
 ```sh
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --version v1.12.14
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --version v1.12.17
 ```
 
 
@@ -75,6 +76,9 @@ kubectl create namespace cattle-system
 192.168.5.201.sslip.io
 
 # 可以设置初始密码，如果没有设置初始密码，则通过 kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{ "\n" }}' 来获取
-helm install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.wecharmer.com  --set bootstrapPassword=admin --version 2.8.5
+helm install rancher rancher-stable/rancher --namespace cattle-system --set hostname=rancher.xxx.com  --set bootstrapPassword=admin --set ingress.tls.source=secret --version 2.8.5
 ```
 
+
+
+helm install rancher rancher-stable/rancher --namespace cattle-system --set hostname=10.10.206.31.sslip.io  --set bootstrapPassword=admin --set ingress.tls.source=secret --version 2.8.5

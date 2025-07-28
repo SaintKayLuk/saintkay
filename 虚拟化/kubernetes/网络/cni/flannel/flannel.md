@@ -2,7 +2,7 @@
 
 
 ```sh
-wget https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+wget https://github.com/flannel-io/flannel/releases/download/v0.25.6/kube-flannel.yml
 
 #下载到本地，修改 Network 的值和 kubeadm --pod-network-cidr 的值一样
 
