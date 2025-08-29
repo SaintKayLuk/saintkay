@@ -100,8 +100,11 @@ sudo passwd root
 
 2. 设置root用户可以通过ssh登陆
 ```sh
-# 切换root用户
+# 切换root用户，输入当前用户密码
 su root
+
+# 也可以直接使用以下命名切换root，不需要输入密码，待验证
+sudo -i
 
 # 编辑ssh配置文件，设置 -> PermitRootLogin yes
 vi /etc/ssh/sshd_config

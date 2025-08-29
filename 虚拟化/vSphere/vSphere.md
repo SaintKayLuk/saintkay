@@ -31,13 +31,13 @@ HV4WC-01087-1ZJ48-031XP-9A843
 
 ---
 
-VMware vCenter 7.0 Standard
+#### VMware vCenter 7.0 Standard
 ```
 104HH-D4343-07879-MV08K-2D2H2
 410NA-DW28H-H74K1-ZK882-948L4
 406DK-FWHEH-075K8-XAC06-0JH08
 ```
-VMware vSphere ESXi 7.0 Enterprise Plus
+#### VMware vSphere ESXi 7.0 Enterprise Plus
 ```
 JJ2WR-25L9P-H71A8-6J20P-C0K3F
 HN2X0-0DH5M-M78Q1-780HH-CN214
@@ -46,16 +46,25 @@ JH09A-2YL84-M7EC8-FL0K2-3N2J2
 
 ---
 
-vSphere 8 Enterprise Plus 许可证
+#### vSphere 8 Enterprise Plus 许可证
 ```
 4V492-44210-48830-931GK-2PRJ4
 ```
-vCenter Server 8 Standard 许可证
+#### vCenter Server 8 Standard 许可证
 ```
 0Z20K-07JEH-08030-908EP-1CUK4
 0F41K-0MJ4H-M88U1-0C3N0-0A214
 4F282-0MLD2-M8869-T89G0-CF240
 ```
+
+
+#### vSAN许可证
+```
+HN0D8-AAJ1Q-07D00-6U924-CX224
+50008-221DH-M7E99-A9CKM-A1030
+```	
+
+
 
 ## esxi 安装vmtoos
 

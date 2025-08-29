@@ -1,0 +1,20 @@
+给某个用户授予某个数据库权限
+```sql
+USE [库名];
+GO
+
+-- 删除可能存在的孤立用户
+IF EXISTS (SELECT 1 FROM sys.database_principals WHERE name = N'用户名')
+BEGIN
+    DROP USER [用户名];
+END
+GO
+
+-- 创建数据库用户，映射到已有登录名
+CREATE USER [用户名] FOR LOGIN [用户名] WITH DEFAULT_SCHEMA=[dbo];
+GO
+
+-- 给足权限（整个数据库所有权限）
+ALTER ROLE [db_owner] ADD MEMBER [用户名];
+GO
+```
