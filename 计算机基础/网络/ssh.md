@@ -85,6 +85,32 @@ ListenAddress 0.0.0.0
 ```
 
 
+## 源码编译openssh
+
+基于某些不智能的漏洞扫描工具，只会判断大版本号而不判断补丁号，统一认定你的ssh版本为漏洞版本，所以需要源码编译一个高版本的openssh
+
+```sh
+# 安装依赖
+sudo apt update
+sudo apt install build-essential zlib1g-dev libssl-dev libpam0g-dev libselinux1-dev pkg-config
+
+# 下载源码
+cd /usr/local/src
+wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.9p2.tar.gz
+sudo tar -xzf openssh-9.9p2.tar.gz
+cd openssh-9.9p2
+
+# 编译并安装
+./configure --prefix=/usr --sysconfdir=/etc/ssh --with-pam
+make
+sudo make install
+
+# 可选：重启 ssh
+systemctl restart ssh
+```
+
+
+
 ## 基于ssh的其他协议
 
 ### scp

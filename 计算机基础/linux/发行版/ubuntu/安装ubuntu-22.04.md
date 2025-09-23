@@ -142,7 +142,7 @@ apt update
 
 升级软件包到最新版本
 ```sh
-apt upgrade
+apt -y upgrade
 ```
 
 ## 配置ip

@@ -1,4 +1,4 @@
-给某个用户授予某个数据库权限
+## 给某个用户授予某个数据库权限
 ```sql
 USE [库名];
 GO
@@ -18,3 +18,25 @@ GO
 ALTER ROLE [db_owner] ADD MEMBER [用户名];
 GO
 ```
+
+
+## 给数据库改所有者
+
+
+例：所有者改为 sa
+```sql
+USE [数据库名];
+GO
+ALTER AUTHORIZATION ON DATABASE::[数据库名] TO [sa];
+GO
+```
+
+验证一下
+```sql
+SELECT name, suser_sname(owner_sid) AS owner
+FROM sys.databases
+WHERE name = '数据库名';
+```
+
+
+

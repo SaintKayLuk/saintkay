@@ -3,7 +3,9 @@
 sql server 的高可用，依赖于 AD，需要sql server 服务器加入域，并且依赖于 故障转移集群工具
 
 
-
+1. 配置好故障转移集群之后，打开 sql server configuration manager
+2. 右键 sql server 服务，属性，打开启用 always on
+3. 重启 sql server 服务
 
 
 
