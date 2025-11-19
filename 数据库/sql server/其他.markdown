@@ -40,3 +40,20 @@ WHERE name = '数据库名';
 
 
 
+## 创建link
+
+```sql
+EXEC sp_addlinkedserver 
+    @server = 'rdmLink',            -- 链接服务器名称
+    @srvproduct = '',               -- SQL Server 可留空
+    @provider = 'SQLNCLI',          -- 或者直接省略，默认就是 SQL Server Native Client
+    @datasrc = '192.168.35.43';     -- 目标 SQL Server 地址
+
+-- 配置登录映射
+EXEC sp_addlinkedsrvlogin 
+    @rmtsrvname = 'rdmLink',
+    @useself = 'False',
+    @locallogin = NULL,
+    @rmtuser = 'sa',
+    @rmtpassword = 'P@ssw0rd';
+```

@@ -92,7 +92,7 @@ ListenAddress 0.0.0.0
 ```sh
 # 安装依赖
 sudo apt update
-sudo apt install build-essential zlib1g-dev libssl-dev libpam0g-dev libselinux1-dev pkg-config
+sudo apt install -y build-essential zlib1g-dev libssl-dev libpam0g-dev libselinux1-dev pkg-config
 
 # 下载源码
 cd /usr/local/src

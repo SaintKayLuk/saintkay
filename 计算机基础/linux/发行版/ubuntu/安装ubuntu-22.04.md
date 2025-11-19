@@ -43,17 +43,18 @@ https://ubuntu.com/download/server
     ...
     ```
 9.  磁盘分区
-    1. 第一块硬盘做系统盘，1G给/boot ，剩下的给/ 
-    2. 第二块硬盘用lvm方式，挂载 /data 等，用作数据盘
-    
-            如果使用的是台式机来装ubuntu系统，出现硬盘识别不到的情况，则进bios，关闭 Intel RST
-            如果原来的分区删不掉，则通过 Ctrl + Alt + F2 进入终端
-                fdisk /dev/sdX 
-                然后在 fdisk 命令行输入：
-                  p （查看分区）
-                  d （删除分区，重复多次直到所有分区都删掉）
-                  w （保存更改并退出）
-                删除所有分区后w保存退出，再 Ctrl + Alt + F1 回安装界面
+    1. 第一块硬盘默认lvm分区
+       1. 默认标准分区1G给/boot
+       2. 剩下的lvm都给 /
+       3. 默认创建 ubuntu-vg 和 ubuntu-lv  
+    2. 第二块硬盘创建lvm，默认vg0，全都分给 /data
+    3. 如下，先选 /dev/sda 来自动分区，会自动生成 /boot 和 /
+    Configure a guided storage layout, ou create a custom one:
+    (X) Use an entire disk
+        [ /dev/sda local disk 60.00G]
+        [X] Set up this disk as an LVM group
+
+    ubuntu-lv 把剩下的所有空间分给 / 
 
 
 
@@ -103,7 +104,7 @@ sudo passwd root
 # 切换root用户，输入当前用户密码
 su root
 
-# 也可以直接使用以下命名切换root，不需要输入密码，待验证
+# 也可以直接使用以下命名切换root，输入当前用户密码
 sudo -i
 
 # 编辑ssh配置文件，设置 -> PermitRootLogin yes
@@ -145,6 +146,15 @@ apt update
 apt -y upgrade
 ```
 
+安装一些常用软件
+```sh
+apt install -y net-tools lrzsz
+
+
+# 例如 netplan apply 提示 WARNING:root:Cannot call Open vSwitch: ovsdb-server.service is not running.
+apt install openvswitch-switch -y
+```
+
 ## 配置ip
 
 networkd 和 NetworkManager
@@ -167,12 +177,14 @@ network:
       routes:
       - to: default
         via: 192.168.2.1        #网关，也就是默认路由
+      dhcp6: no        # ← 禁用 IPv6 DHCP
+      accept-ra: no    # ← 禁用 IPv6 路由通告（RA）
   version: 2
-#  renderer: NetworkManager     #默认使用networkd，所以此项不需要设置
+  renderer: NetworkManager     #默认使用networkd，建议显式声明使用 networkd
 ```
 
 
-## 禁用 ipv6
+## 禁用 ipv6  此操作重启后失效，待验证，centos可能起作用，但是ubuntu22.04不起作用
 
 ```
 echo "net.ipv6.conf.all.disable_ipv6 = 1"     >> /etc/sysctl.conf
