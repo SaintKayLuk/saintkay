@@ -20,16 +20,24 @@ sudo systemctl start postgresql-14
 ```
 
 
-apt安装
+#### ubuntu 安装
+
+
+自动配置仓库
 ```sh
 sudo apt install -y postgresql-common
 sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+
+# 修改一下 /etc/apt/sources.list.d/pgdg.list 把 http 源改为 https
+sed -i 's/http:/https:/g' /etc/apt/sources.list.d/pgdg.list
+
 sudo apt update
+```
 
-# 安装指定版本
-udo apt install postgresql-14 postgresql-client-14 -y
 
-sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
+安装指定版本，例如安装 15 版本
+```sh
+sudo apt install postgresql-15 postgresql-client-15 -y
 ```
 
 
@@ -61,6 +69,9 @@ sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
 
 ## 安装后设置
 
+```sh
+sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
+```
 
 默认用户为 postgres ，并且没有密码
 

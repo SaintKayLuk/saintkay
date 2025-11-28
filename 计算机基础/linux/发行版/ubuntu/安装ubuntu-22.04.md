@@ -130,10 +130,11 @@ cp  /etc/apt/sources.list  /etc/apt/sources.list.bak
 * 中科大镜像：https://mirrors.ustc.edu.cn/ubuntu/
 * 阿里云镜像：http://mirrors.aliyun.com/ubuntu/
 
-替换的旧字符串不一定是 **http://cn.archive.ubuntu.com/ubuntu/**
+替换的旧字符串不一定是 **http://cn.archive.ubuntu.com/ubuntu/** 有可能是 **http://archive.ubuntu.com/ubuntu/**
 ```sh
 # 替换的旧字符串
 sed -i 's/http:\/\/cn.archive.ubuntu.com\/ubuntu\//https:\/\/mirrors.aliyun.com\/ubuntu\//g' /etc/apt/sources.list
+sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//https:\/\/mirrors.aliyun.com\/ubuntu\//g' /etc/apt/sources.list
 ```
 
 更新软件包索引
@@ -168,31 +169,23 @@ vi /etc/netplan/00-installer-config.yaml
 
 network:
   ethernets:
-    ens160:                     #网卡名
+    ens160:                 # 网卡名
+      dhcp4: no             # ← 禁用 IPv4 DHCP
+      dhcp6: no             # ← 禁用 IPv6 DHCP
+      accept-ra: no         # ← 禁用 IPv6 路由通告（RA）
+      link-local: []        # 禁止 Linux 生成 fe80:: 地址
       addresses:
       - 192.168.2.12/24
-      nameservers:              #dns
+      nameservers:          #dns
         addresses:
         - 192.168.2.1
-      routes:
+      routes:               #路由，设置默认路由也就是网关
       - to: default
-        via: 192.168.2.1        #网关，也就是默认路由
-      dhcp6: no        # ← 禁用 IPv6 DHCP
-      accept-ra: no    # ← 禁用 IPv6 路由通告（RA）
+        via: 192.168.2.1    
   version: 2
   renderer: NetworkManager     #默认使用networkd，建议显式声明使用 networkd
 ```
 
-
-## 禁用 ipv6  此操作重启后失效，待验证，centos可能起作用，但是ubuntu22.04不起作用
-
-```
-echo "net.ipv6.conf.all.disable_ipv6 = 1"     >> /etc/sysctl.conf
-echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
-echo "net.ipv6.conf.lo.disable_ipv6 = 1"      >> /etc/sysctl.conf
-
-sysctl -p
-```
 
 ## 禁用swap
 

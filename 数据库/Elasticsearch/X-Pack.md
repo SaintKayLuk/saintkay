@@ -16,9 +16,9 @@ xpack.security.enabled: true
 3. 设置密码
 ```sh
 #自动生成密码，密码会输出到控制台
-./bin/elasticsearch-setup-passwords auto
+/usr/share/elasticsearch//bin/elasticsearch-setup-passwords auto
 #交互方式自定义输入密码
-./bin/elasticsearch-setup-passwords interactive
+./usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive
 ```
 4. elasticsearch设置密码后，kibana需要密码来连接elasticsearch，修改配置文件 kibana.yml
 ```yml
