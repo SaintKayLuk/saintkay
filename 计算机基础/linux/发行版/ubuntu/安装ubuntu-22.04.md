@@ -137,6 +137,15 @@ sed -i 's/http:\/\/cn.archive.ubuntu.com\/ubuntu\//https:\/\/mirrors.aliyun.com\
 sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//https:\/\/mirrors.aliyun.com\/ubuntu\//g' /etc/apt/sources.list
 ```
 
+或者直接全部替换
+```sh
+deb https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse
+```
+
+
 更新软件包索引
 ```sh
 apt update

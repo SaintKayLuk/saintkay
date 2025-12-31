@@ -35,15 +35,20 @@ sudo apt update
 ```
 
 
-安装指定版本，例如安装 15 版本
+安装指定版本，例如安装 15 版本，可以把 libpq-dev 也安装上
 ```sh
-sudo apt install postgresql-15 postgresql-client-15 -y
+sudo apt install postgresql-15 postgresql-client-15 libpq-dev -y
 ```
 
 
 ### 安装完目录结构
 
-可执行目录
+```sh
+
+/usr/share/postgresql
+```
+
+<!-- 可执行目录
 ```
 /usr/pgsql-14
     /bin
@@ -51,7 +56,7 @@ sudo apt install postgresql-15 postgresql-client-15 -y
 
     /lib
     /share
-```
+``` -->
 
 
 数据目录
@@ -68,21 +73,31 @@ sudo apt install postgresql-15 postgresql-client-15 -y
 
 
 ## 安装后设置
-
 ```sh
-sudo /usr/pgsql-14/bin/postgresql-14-setup initdb
+# 创建集群，指定数据目录，默认为 /var/lib/postgresql/15/main
+sudo pg_createcluster 15 main --datadir=/data/postgresql/15/main
+# 慎用！删除数据库目录，如果要更改数据存储位置，则需要执行此命令，重新生成集群
+sudo pg_dropcluster 15 main --stop
+
+# 重新加载
+sudo systemctl daemon-reload
+
+# 启动数据库
+sudo systemctl start postgresql@15-main
 ```
 
-默认用户为 postgres ，并且没有密码
 
-切换为postgres
+**慎用！删除数据库目录，如果要更改数据存储位置，则需要执行此命令，重新生成集群**
 ```sh
-sudo -i -u postgres
+sudo pg_dropcluster 15 main --stop
 ```
 
-登录postgresql
+
+默认用户为 postgres ，并且没有密码，通过postgres用户来登录数据库
 ```sh
-psql
+sudo -u postgres psql
+
+sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '你的新密码';"
 ```
 
 设置个密码
