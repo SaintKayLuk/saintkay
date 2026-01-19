@@ -1,5 +1,4 @@
-apt update
-apt install -y pgpool2
+
 
 
 
@@ -8,11 +7,8 @@ apt install -y pgpool2
 
 ## 源码安装
 
-
-
-
 ```sh
-apt install libpq
+apt install libpq-dev
 
 
 ./configure --prefix=/opt/pgpool2
@@ -24,6 +20,15 @@ make install
 
 
 ### 配置
+
+
+环境变量配置，pgpool 命令添加到环境变量中
+
+
+```sh
+echo 'export PATH="$PATH:/opt/pgpool2/bin"' >> ～/.bashrc
+source ～/.bashrc
+```
 
 **pcp.conf** 配置
 
@@ -38,19 +43,6 @@ pg_md5 your_password
 ```
 
 
-**pgpool.conf**配置
-
-
-```conf
-backend_clustering_mode = 'streaming_replication'
-
-# 设置 * 则同时监听 ipv4 和 ipv6 ，设置 0.0.0.0 则只监听 ipv4
-listen_addresses = '0.0.0.0'
-pcp_listen_addresses = '0.0.0.0'
-
-
-
-```
 
 
 
@@ -67,5 +59,13 @@ pcp_listen_addresses = '0.0.0.0'
 mkdir /var/run/pgpool
 ```
 
+启动与停止
+```sh
+# 启动
+pgpool -f /opt/pgpool2/etc/pgpool.conf -F /opt/pgpool2/etc/pcp.conf
+
+# 停止
+pgpool -f /opt/pgpool2/etc/pgpool.conf -F /opt/pgpool2/etc/pcp.conf -m fast stop
+```
 
 

@@ -104,7 +104,7 @@ sudo passwd root
 # 切换root用户，输入当前用户密码
 su root
 
-# 也可以直接使用以下命名切换root，输入当前用户密码
+# 也可以直接使用以下命名切换root，输入当前用户密码，sudo -i 能切换root 需要查看 普通用户是否在 sudo 组中
 sudo -i
 
 # 编辑ssh配置文件，设置 -> PermitRootLogin yes

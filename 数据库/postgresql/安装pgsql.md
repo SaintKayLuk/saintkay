@@ -76,8 +76,6 @@ sudo apt install postgresql-15 postgresql-client-15 libpq-dev -y
 ```sh
 # 创建集群，指定数据目录，默认为 /var/lib/postgresql/15/main
 sudo pg_createcluster 15 main --datadir=/data/postgresql/15/main
-# 慎用！删除数据库目录，如果要更改数据存储位置，则需要执行此命令，重新生成集群
-sudo pg_dropcluster 15 main --stop
 
 # 重新加载
 sudo systemctl daemon-reload

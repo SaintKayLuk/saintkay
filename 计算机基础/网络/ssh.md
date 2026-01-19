@@ -130,14 +130,12 @@ scp [选项] 用户名@ip:文件全路径 本地目录
 
 例：把本地root目录下的 test.txt 远程copy到 192.168.1.12 的/tmp 目录下
 ```sh
-[root@localhost ~]# scp /root/test.txt root@192.168.1.12:/tmp
-test.txt            100%   30     0.0KB/s   00:00 
+scp /root/test.txt root@192.168.1.12:/tmp
 ```
 
 例：从192.168.1.12上远程下载 root目录下的 abc.txt 文件到本地 /tmp 目录
 ```sh
-[root@localhost ~]# scp root@192.168.1.12:/root/abc.txt /tmp
-abc.txt             100% 1350     1.3KB/s   00:00 
+scp root@192.168.1.12:/root/abc.txt /tmp
 ```
 ### sftp
 加密的ftp协议，在ftp协议上加了一层ssh，比ftp更安全，但传输效率比ftp低
