@@ -44,7 +44,7 @@ shutdown -r
 ## 修改网卡配置文件
 
 查看网卡配置文件,在目录 /etc/sysconfig/network-scripts/
-~~~
+~~~conf
 TYPE="Ethernet"                 网络类型以太网,默认就行
 BOOTPROTO="static"              ip获取方式(dhcp或static)
 DEFROUTE="yes"                  默认网卡

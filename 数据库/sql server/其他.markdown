@@ -17,6 +17,29 @@ GO
 -- 给足权限（整个数据库所有权限）
 ALTER ROLE [db_owner] ADD MEMBER [用户名];
 GO
+
+-- 给只读权限
+ALTER ROLE [db_datareader] ADD MEMBER [用户名];
+GO
+```
+
+
+## 创建一个用户并授予某个数据库的只读权限
+
+需要创建2个用户，一个是 登录用户，是服务器级别的，一个是数据库用户
+```sql
+-- 创建登录用户
+CREATE LOGIN readonly_user WITH PASSWORD = 'StrongP@ssw0rd!';
+
+
+USE YourDB;  -- 替换为你的数据库名
+-- 创建数据库用户并关联登录用户，两个用户名一样，但是意义不一样
+CREATE USER readonly_user FOR LOGIN readonly_user;
+
+
+USE YourDB;
+-- 将用户加入 db_datareader 角色（内置只读角色）
+ALTER ROLE db_datareader ADD MEMBER readonly_user;
 ```
 
 
