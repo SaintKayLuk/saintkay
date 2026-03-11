@@ -202,3 +202,28 @@ net start "Zabbix Agent"
 
 
 
+## ubuntu 22.04
+
+
+下载 agent 包
+```sh
+wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_6.0+ubuntu22.04_all.deb
+dpkg -i zabbix-release_latest_6.0+ubuntu22.04_all.deb
+apt update
+```
+
+安装
+```sh
+apt install zabbix-agent
+```
+
+**修改配置文件 /etc/zabbix/zabbix_agentd.conf**
+
+
+重启 并 设置开机自启
+```sh
+systemctl restart zabbix-agent
+systemctl enable zabbix-agent
+```
+
+

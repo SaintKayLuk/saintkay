@@ -224,7 +224,14 @@ timedatectl
 
 设置为亚洲上海时间
 ```sh
+# 设置时区
 timedatectl set-timezone Asia/Shanghai
+
+# 如果是内网环境，直接设置时间
+timedatectl set-time "2026-02-26 17:35:00"
+
+# 查看一下
+timedatectl status
 ```
 
 设置之后，可能需要重启，不重启 crontab 的时间可能不对，目前还没找到原因，重启后正常
