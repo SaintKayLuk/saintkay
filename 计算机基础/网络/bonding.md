@@ -1,4 +1,32 @@
+# Bond
+
 多个网卡(网线)使用同一个ip，实现网卡或者网线冗余
+
+多个模式
+
+* balance-rr (Mode 0) - 轮询策略
+  * 必须要求交换机端也配置对应的链路聚合（通常是动态或静态聚合）
+* active-backup (Mode 1) - 主备策略（最常用/最安全）
+  * 只有一块网卡活跃
+  * 不需要交换机做任何特殊配置
+* balance-xor (Mode 2) - 异或策略
+* broadcast (Mode 3) - 广播策略
+* 802.3ad (Mode 4) - LACP 动态链路聚合（高性能首选
+* balance-tlb (Mode 5) - 自适应传输负载均衡
+* balance-alb (Mode 6) - 自适应负载均衡
+
+
+| 模式名称 | 代号 | 核心逻辑 | 交换机配置 | 推荐指数 | 典型用途 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| active-backup | Mode 1 | 一主一备，断了才切换 | 不需要 | ⭐⭐⭐⭐⭐ | 通用首选，稳定省心 |
+| 802.3ad | Mode 4 | 动态聚合，带宽叠加 | 必须配 LACP | ⭐⭐⭐⭐ | 高性能服务器 (需交换机支持) |
+| balance-rr | Mode 0 | 轮询，依次发送 | 需配聚合 | ⭐⭐ | 旧式高吞吐 (易乱序，慎用) |
+| broadcast | Mode 3 | 广播，所有口同时发 | 不需要 | ⭐ | 极特殊高可靠/心跳/调试 |
+| balance-xor | Mode 2 | 哈希，按地址固定路径 | 需配静态聚合 | ⭐⭐ | 特定负载平衡需求 |
+| balance-tlb/alb | Mode 5/6 | 自适应，智能调节 | 不需要 | ⭐⭐ | 特殊无交换机负载均衡 |
+
+
+
 
 
 mode4 ↓
@@ -68,6 +96,55 @@ cat /proc/net/bonding/bond0
 
 ## ubuntu 22.04 设置 bonding
 
+
+进 /etc/netplan 目录下
+
+有 00-installer-config.yaml 则修改，没有则新建，内容如下
+
+
+配置 mode4
+```yaml
+network:
+  version: 2
+  ethernets:
+  # LACP 模式下，物理网卡不需要 IP，也不需要开启 STP 等，保持最简
+    eno1: {}
+    eno2: {}
+  bonds:
+    bond4:
+      interfaces:
+        - eno1
+        - eno2
+
+      # IP 地址配置在 bond0 接口上，而不是物理网卡上
+      addresses:
+        - 192.168.1.100/24   # 替换为你的静态 IP
+      parameters:
+        # 核心：设置为 802.3ad (LACP)
+        mode: 802.3ad
+        
+        # LACP 数据包发送频率：fast (1秒) 或 slow (30秒)
+        # 建议设为 fast 以便更快检测链路故障
+        lacp-rate: fast
+        
+        # 选择策略：通常使用 layer3+4 (基于源/目IP + 端口哈希)，负载均衡效果最好
+        transmit-hash-policy: layer3+4
+        
+        # MII 监控间隔 (毫秒)
+        mii-monitor-interval: 100
+        
+        # 802.3ad 特定的超时时间 (可选，通常默认即可)
+        # ad-select: stable (默认) 或 bandwidth, count
+        
+      routes:
+        - to: default
+          via: 192.168.1.1   # 替换为你的网关
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 1.1.1.1
+
+```
 
 
 ## windows server 设置 bonding

@@ -35,6 +35,13 @@ https://ubuntu.com/download/server
     name servers:   dns地址，例如杭州电信 202.101.172.35
     Search domains: 搜索域访,访问一个“不完整的主机名”时，会自动加上这个域名后缀去尝试解析。例如设置了 xxx.com，则访问 web1，相当于访问 web1.xxx.com
     ```
+
+    创建bond，详细见[Bond配置](../../../网络/bonding.md)
+    ```
+    Name: bond0     可以根据创建的模式来命名，例如创建mode=4的 bond 则可以命名为 bond4
+    Devices:        选择需要绑定bond的网卡
+    Bond mode:      选择模式
+    ```
 6. 设置代理：默认不添加，直接选 Done
 7. Ubuntu archive mirror configuration：等待加载完，点 Done ，如果testing失败了呢，默认镜像源需要改？
 8. 是否更新安装程序，如果有的话，我们选择 **Update to the new installer**
