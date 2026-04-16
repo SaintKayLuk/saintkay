@@ -163,6 +163,8 @@ systemctl enable zabbix-server zabbix-agent2 nginx php8.1-fpm --now
 #include /etc/nginx/sites-enabled/*
 ```
 
+**如果conf.d 目录下有其他配置文件，例如 default.conf 可以改名或者删除掉**
+
 
 ## 配置 zabbix
 
