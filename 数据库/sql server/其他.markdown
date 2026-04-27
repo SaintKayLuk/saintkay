@@ -31,7 +31,7 @@ GO
 -- 创建登录用户
 CREATE LOGIN readonly_user WITH PASSWORD = 'StrongP@ssw0rd!';
 
-s
+
 USE YourDB;  -- 替换为你的数据库名
 -- 创建数据库用户并关联登录用户，两个用户名一样，但是意义不一样
 CREATE USER readonly_user FOR LOGIN readonly_user;
