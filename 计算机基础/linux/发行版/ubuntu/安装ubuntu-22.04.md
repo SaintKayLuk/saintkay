@@ -244,3 +244,27 @@ timedatectl status
 设置之后，可能需要重启，不重启 crontab 的时间可能不对，目前还没找到原因，重启后正常
 
 
+设置 NTP 服务，自动校准时间
+
+```sh
+vi /etc/systemd/timesyncd.conf
+```
+
+修改一下配置，设置 ntp 服务器的ip
+```conf
+[Time]
+NTP=192.168.1.100
+```
+
+重启并验证下
+```sh
+systemctl restart systemd-timesyncd
+timedatectl status
+```
+
+显示
+```
+...
+System clock synchronized: yes
+...
+```

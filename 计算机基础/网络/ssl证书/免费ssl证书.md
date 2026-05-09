@@ -39,23 +39,14 @@ certbot certonly -d xxx.com --preferred-challenges dns --manual
 #查看证书
 certbot certificates
 #更新证书
-certbot renew
-    --force-renew   强制更新
+certbot renew       #更新所有证书
+    --force-renew   #强制更新
 
 #删除证书域名为xxx.com的证书
 certbot delete --cert-name xxx.com
 ```
 
-泛域名需要DNS验证，续期的时候需要脚本去验证，如果不能实现，则再申请一次
+续订某一个证书
 ```sh
-
-certbot certonly -d *.gov-eye.com --preferred-challenges dns --manual
-
-...
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-1: Keep the existing certificate for now
-2: Renew & replace the certificate (may be subject to CA rate limits)
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Select the appropriate number [1-2] then [enter] (press 'c' to cancel): 2
-Renewing an existing certificate for *.gov-eye.com
+certbot certonly --force-renewal -d *.xxx.com --standalone
 ```
