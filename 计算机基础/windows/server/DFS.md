@@ -29,6 +29,7 @@ Finance → fs01
 
 ### DFS Replication
 
+DFS 管理页面，创建复制组即可
 
 
 ### 安装步骤
