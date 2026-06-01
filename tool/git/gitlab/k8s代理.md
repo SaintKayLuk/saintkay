@@ -24,3 +24,4 @@ https://gitlab.wecharmer.com  本地访问 192.168.4.75
 在gitlab上 的 https 证书要用 通配符 *.wecharmer.com 的证书
 
 然后最后 注册的 agent 的 wss地址 要改为 gitlab-agent.wecharmer.com 的地址 例如  wss://gitlab-agent.wecharmer.com:4433/-/kubernetes-agent/
+
