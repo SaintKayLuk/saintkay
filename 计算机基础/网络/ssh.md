@@ -85,7 +85,7 @@ ListenAddress 0.0.0.0
 ```
 
 
-## 源码编译openssh
+## ubuntu 22.04 源码安装 openssh
 
 基于某些不智能的漏洞扫描工具，只会判断大版本号而不判断补丁号，统一认定你的ssh版本为漏洞版本，所以需要源码编译一个高版本的openssh
 
@@ -109,6 +109,77 @@ sudo make install
 systemctl restart ssh
 ```
 
+
+
+
+## centos 7 源码安装 openssh
+
+先备份一下配置文件
+```sh
+sudo cp -r /etc/ssh /etc/ssh.bak
+sudo cp -r /usr/bin/openssl /usr/bin/openssl.bak
+```
+
+安装依赖
+```sh
+sudo yum install -y gcc make zlib-devel openssl-devel pam-devel krb5-devel perl-IPC-Cmd wget perl-core
+```
+
+安装 openssl ，如果低于 1.1.1 则需要编译安装一下
+```sh
+openssl version
+
+cd /usr/src
+# 如果下载不了，用自己电脑浏览器下载再拷到服务器上
+sudo wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+sudo tar -xzf openssl-1.1.1w.tar.gz
+cd openssl-1.1.1w
+
+sudo ./config --prefix=/usr/local/ssl --shared
+sudo make -j $(nproc)
+sudo make install
+```
+
+更新动态链接库缓存
+```sh
+# 1. 将 OpenSSL 的库路径写入配置文件
+echo "/usr/local/ssl/lib" >> /etc/ld.so.conf
+
+# 2. 重新加载动态链接库缓存
+ldconfig
+```
+
+安装 openssh
+
+可以在 https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable 查看可下载的版本
+
+```sh
+cd /usr/src
+wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.9p2.tar.gz
+tar -xzf openssh-9.9p2.tar.gz
+cd openssh-9.9p2
+
+# 修改一下权限(可选)
+chmod 600 /etc/ssh/ssh_host_*_key
+chmod 644 /etc/ssh/ssh_host_*_key.pub
+
+
+./configure --prefix=/usr --sysconfdir=/etc/ssh --with-pam --with-zlib --with-ssl-dir=/usr/local/ssl
+make -j $(nproc)
+make install
+
+# 修改一下配置文件(可选)
+echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config
+echo 'PasswordAuthentication yes' | sudo tee -a /etc/ssh/sshd_config
+
+systemctl daemon-reload
+systemctl enable sshd --now
+```
+
+最后验证一下
+```sh
+ssh -V  
+```
 
 
 ## 基于ssh的其他协议

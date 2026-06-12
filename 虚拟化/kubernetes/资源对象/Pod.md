@@ -129,7 +129,7 @@ spec:
 
 * Waiting：例如正在拉取镜像等，可以通过 kubectl 查看 pod 的 Reason 字段
 * Running
-* Terminated：终止，容器正常结束或者异常终止
+* Terminated: 终止，容器正常结束或者异常终止
 
 
 
