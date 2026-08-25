@@ -107,3 +107,6 @@ ALTER USER postgres WITH PASSWORD '你的新密码';
 ```sh
 \q
 ```
+
+
+

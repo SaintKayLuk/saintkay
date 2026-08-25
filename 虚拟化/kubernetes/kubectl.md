@@ -172,6 +172,12 @@ kubectl exec test -it -- bash
 
 通过 explan 列出资源选项
 
+```sh
+kubectl explain pods 
+    --recursive       #列出此层级下所有资源
+
+```
+
 
 例：kubectl explain pod，列出pod的资源的选项，相当于当 Kind 为 Pod 的时候，能写的key是哪些，当然可以 kubectl explain pod.spec 来查看 pod.spec 下的资源清单
 ```
