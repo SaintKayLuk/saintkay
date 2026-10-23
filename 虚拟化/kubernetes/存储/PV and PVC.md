@@ -39,7 +39,7 @@ spec:
     - ReadWriteOnce                       #卷可以被一个节点以读写方式挂载
     - ReadOnlyMany                        #卷可以被多个节点以只读方式挂载
     - ReadWriteMany                       #卷可以被多个节点以读写方式挂载
-  persistentVolumeReclaimPolicy: Recycle  #回收策略，Retain，Recycle，Delete 
+  persistentVolumeReclaimPolicy: Retain   #回收策略, Retain(默认), Recycle(弃用), Delete 
   storageClassName: slow                  #存储类，特定存储类只能绑定到指明该存储类的pvc，没有存储类的pv绑定到没有存储类的pvc
   mountOptions:                           #挂载选项
     - hard
@@ -65,9 +65,10 @@ spec:
 
 1. 删除挂载pvc的pod不会删除pvc
 2. 而删除pvc时，pv根据回收策略来决定pv的去留
+3. 通过 StorageClass 动态创建的pv会继承StorageClass的 reclaimPolicy
 
-* Retain： 保留，手动回收，即删除pvc，pv会被保留，即使删除pv，卷上存储的数据也还存在
-* Recycle：回收，会在卷上执行一些基本的擦除 （rm -rf /thevolume/*）操作，之后允许该卷用于新的 PVC 申领。
+* Retain(默认)： 保留，手动回收，即删除pvc，pv会被保留，即使删除pv，卷上存储的数据也还存在
+* Recycle(弃用)：回收，会在卷上执行一些基本的擦除 （rm -rf /thevolume/*）操作，之后允许该卷用于新的 PVC 申领。
 * Delete：删除，删除pvc会删除绑定的pv，并且卷上的数据也会被删除
 
 

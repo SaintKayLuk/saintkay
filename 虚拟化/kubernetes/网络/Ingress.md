@@ -88,7 +88,7 @@ metadata:
   name: test-ingress
   namespace: default
   annotations:                          # 注解
-    nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.1.1/32"  # 白名单
+    nginx.ingress.kubernetes.io/rewrite-target:  /  # 重写路径
 spec:
   ingressClassName: nginx               #指定IngressClass，如果不设置此值会用默认class，但是必须设置了默认class
   tls:                                  #设置https的证书
@@ -115,8 +115,17 @@ spec:
 
 ## ingress 注解
 
+路径重写，例如下面的path部分写了 "/echo"，当访问 "xxx/echo" 时，转发后端收到的路径默认仍然是 /echo，而不是 /
+
+一句话就是 不管path 写什么 最后到后端service 都是访问 /
 
 ```yaml
+nginx.ingress.kubernetes.io/rewrite-target:  /
+```
+
+
+
+```
 # 白名单
 nginx.ingress.kubernetes.io/whitelist-source-range: "192.168.1.1/32"
 
